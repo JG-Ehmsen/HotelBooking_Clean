@@ -31,7 +31,49 @@ namespace HotelBooking.WebApi.Controllers
             {
                 return NotFound();
             }
-            return new ObjectResult(item);
+            return Ok(item);
+        }
+
+        // POST api/rooms
+        [HttpPost]
+        public IActionResult Post([FromBody]Room room)
+        {
+            if (room == null)
+            {
+                return BadRequest();
+            }
+
+            var created = repository.Add(room);
+
+            if (created != null)
+            {
+                return Ok(created);
+            }
+            else
+            {
+                return Conflict("The customer could not be created.");
+            }
+
+        }
+
+        // PUT api/rooms/5
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody]Room room)
+        {
+            if (room == null || room.Id != id)
+            {
+                return BadRequest();
+            }
+
+            var origRoom = repository.Get(id);
+
+            if (origRoom == null)
+            {
+                return NotFound();
+            }
+
+            var editedRoom = repository.Edit(room);
+            return Ok(editedRoom);
         }
 
         // DELETE api/rooms/5
@@ -43,8 +85,8 @@ namespace HotelBooking.WebApi.Controllers
                 return NotFound();
             }
 
-            repository.Remove(id);
-            return NoContent();
+            var removedRoom = repository.Remove(id);
+            return Ok(removedRoom);
         }
 
     }

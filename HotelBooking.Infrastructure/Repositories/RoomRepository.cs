@@ -16,12 +16,18 @@ namespace HotelBooking.Infrastructure.Repositories
 
         public Room Add(Room entity)
         {
-            throw new NotImplementedException();
+            db.Add(entity);
+            db.SaveChanges();
+            return entity;
         }
 
         public Room Edit(Room entity)
         {
-            throw new NotImplementedException();
+            var OrigRoom = Get(entity.Id);
+            OrigRoom.Description = entity.Description;
+
+            db.SaveChanges();
+            return OrigRoom;
         }
 
         public Room Get(int id)
@@ -43,7 +49,7 @@ namespace HotelBooking.Infrastructure.Repositories
             var room = db.Room.Single(r => r.Id == id);
             db.Room.Remove(room);
             db.SaveChanges();
-            return null;
+            return room;
         }
     }
 }
