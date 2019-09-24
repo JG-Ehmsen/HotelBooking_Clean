@@ -19,18 +19,20 @@ namespace HotelBooking.UnitTests.Fakes
         // Add method was invoked.
         public bool addWasCalled = false;
 
-        public void Add(Booking entity)
+        public Booking Add(Booking entity)
         {
             addWasCalled = true;
+            return null;
         }
 
         // This field is exposed so that a unit test can validate that the
         // Edit method was invoked.
         public bool editWasCalled = false;
 
-        public void Edit(Booking entity)
+        public Booking Edit(Booking entity)
         {
             editWasCalled = true;
+            return null;
         }
 
         public Booking Get(int id)
@@ -52,9 +54,10 @@ namespace HotelBooking.UnitTests.Fakes
         // Remove method was invoked.
         public bool removeWasCalled = false;
 
-        public void Remove(int id)
+        public Booking Remove(int id)
         {
             removeWasCalled = true;
+            return null;
         }
     }
 }
