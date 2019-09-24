@@ -6,8 +6,8 @@ namespace HotelBooking.Core
     {
         IEnumerable<T> GetAll();
         T Get(int id);
-        void Add(T entity);
-        void Edit(T entity);
-        void Remove(int id);
+        T Add(T entity);
+        T Edit(T entity);
+        T Remove(int id);
     }
 }

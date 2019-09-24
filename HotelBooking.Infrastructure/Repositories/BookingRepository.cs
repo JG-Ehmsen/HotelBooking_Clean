@@ -14,16 +14,18 @@ namespace HotelBooking.Infrastructure.Repositories
             db = context;
         }
 
-        public void Add(Booking entity)
+        public Booking Add(Booking entity)
         {
             db.Booking.Add(entity);
             db.SaveChanges();
+            return null;
         }
 
-        public void Edit(Booking entity)
+        public Booking Edit(Booking entity)
         {
             db.Entry(entity).State = EntityState.Modified;
             db.SaveChanges();
+            return null;
         }
 
         public Booking Get(int id)
@@ -36,11 +38,12 @@ namespace HotelBooking.Infrastructure.Repositories
             return db.Booking.Include(b => b.Customer).Include(b => b.Room).ToList();
         }
 
-        public void Remove(int id)
+        public Booking Remove(int id)
         {
             var booking = db.Booking.FirstOrDefault(b => b.Id == id);
             db.Booking.Remove(booking);
             db.SaveChanges();
+            return null;
         }
 
     }

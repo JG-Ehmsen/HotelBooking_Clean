@@ -14,12 +14,12 @@ namespace HotelBooking.Infrastructure.Repositories
             db = context;
         }
 
-        public void Add(Room entity)
+        public Room Add(Room entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Edit(Room entity)
+        public Room Edit(Room entity)
         {
             throw new NotImplementedException();
         }
@@ -36,13 +36,14 @@ namespace HotelBooking.Infrastructure.Repositories
             return db.Room.ToList();
         }
 
-        public void Remove(int id)
+        public Room Remove(int id)
         {
             // The Single method below throws an InvalidOperationException
             // if there is not exactly one room with the specified Id.
             var room = db.Room.Single(r => r.Id == id);
             db.Room.Remove(room);
             db.SaveChanges();
+            return null;
         }
     }
 }
