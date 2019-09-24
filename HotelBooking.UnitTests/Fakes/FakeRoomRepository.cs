@@ -46,6 +46,7 @@ namespace HotelBooking.UnitTests.Fakes
 
         public Room Remove(int id)
         {
+            // Hehehe
             removeWasCalled = true;
             return null;
         }
