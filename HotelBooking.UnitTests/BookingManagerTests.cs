@@ -111,5 +111,25 @@ namespace HotelBooking.UnitTests
             Assert.Throws<ArgumentException>(() => bookingManager.GetFullyOccupiedDates(startDate, endDate));
         }
 
+        [Theory]
+        [InlineData("30/12/2019", "31/12/2019", 0)] // Vacant period BEFORE known bookings.
+        [InlineData("31/12/2019", "1/1/2020", 1)] // One day intersecting start of known bookings.
+        [InlineData("1/2/2020", "2/2/2020", 1)] // One day intersecting end of known bookings.
+        [InlineData("30/12/2021", "31/12/2021", 0)] // Vacant period AFTER known bookings.
+        public void GetFullyOccupiedDates_VacantPeriod_ReturnsEmptyList(string startDate, string endDate, int numOccupiedDates)
+        {
+            // Arrange
+            var start = DateTime.Parse(startDate);
+            var end = DateTime.Parse(endDate);
+
+            // Act
+            var occupiedDates = bookingManager.GetFullyOccupiedDates(start, end);
+
+            // Assert
+            Assert.Equal(numOccupiedDates, occupiedDates.Count);
+        }
+
+
+
     }
 }
