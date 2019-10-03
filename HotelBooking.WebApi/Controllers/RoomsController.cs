@@ -3,6 +3,7 @@ using HotelBooking.Core;
 using Microsoft.AspNetCore.Mvc;
 
 
+
 namespace HotelBooking.WebApi.Controllers
 {
     [Route("api/[controller]")]
@@ -80,14 +81,21 @@ namespace HotelBooking.WebApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            if (repository.Get(id) == null)
+            // if (repository.Get(id) == null)
+            if (id > 0)
             {
-                return NotFound();
+                repository.Remove(id);
+                return NoContent();
             }
+            else
+            {
+                return BadRequest();
 
-            var removedRoom = repository.Remove(id);
-            return Ok(removedRoom);
+                /*
+                var removedRoom = repository.Remove(id);
+                return Ok(removedRoom);
+                */
+            }
         }
-
     }
 }
