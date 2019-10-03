@@ -105,7 +105,7 @@ namespace HotelBooking.UnitTests
                     x.Remove(It.Is<int>(id => id < 1 || id > 2))).Throws<InvalidOperationException>();
 
             // Assert
-            Assert.ThrowsAsync<InvalidOperationException>(() => controller.Delete(3));
+            Assert.Throws<InvalidOperationException>(() => controller.Delete(3));
 
             // Assert against the mock object
             fakeRoomRepository.Verify(x => x.Remove(It.IsAny<int>()));
