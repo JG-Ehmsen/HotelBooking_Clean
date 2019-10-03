@@ -11,11 +11,11 @@ namespace HotelBooking.UnitTests
     {
         private IBookingManager bookingManager;
 
+        Mock<IRepository<Booking>> fakeBookingRepository;
+        Mock<IRepository<Room>> fakeRoomRepository;
+
+
         public BookingManagerTests(){
-            DateTime start = DateTime.Today.AddDays(10);
-            DateTime end = DateTime.Today.AddDays(20);
-            //IRepository<Booking> bookingRepository = new FakeBookingRepository(start, end);
-            Mock<IRepository<Booking>> fakeBookingRepository;
 
             fakeBookingRepository = new Mock<IRepository<Booking>>();
 
@@ -30,8 +30,6 @@ namespace HotelBooking.UnitTests
 
             fakeBookingRepository.Setup(x => x.Add(It.IsAny<Booking>())).Returns(bookings[0]);
 
-            //IRepository<Room> roomRepository = new FakeRoomRepository();
-            Mock<IRepository<Room>> fakeRoomRepository;
 
             fakeRoomRepository = new Mock<IRepository<Room>>();
 
@@ -63,6 +61,54 @@ namespace HotelBooking.UnitTests
             int roomId = bookingManager.FindAvailableRoom(date, date);
             // Assert
             Assert.NotEqual(-1, roomId);
+        }
+
+        [Fact]
+        public void CreateBooking_NoRoomsAvailable_ReturnFalse()
+        {
+            // Arrange
+            var booking = new Booking { Id = 1, CustomerId = 1, RoomId = 1, IsActive = true, StartDate = new DateTime(2020, 1, 1), EndDate = new DateTime(2020, 2, 1) };
+
+            // Act
+            var created = bookingManager.CreateBooking(booking);
+
+            // Assert
+            Assert.False(created);
+        }
+
+        [Fact]
+        public void CreateBooking_RoomAvailable_ReturnTrue()
+        {
+            // Arrange
+            var booking = new Booking { Id = 1, CustomerId = 1, RoomId = 1, IsActive = true, StartDate = new DateTime(2021, 1, 1), EndDate = new DateTime(2021, 2, 1) };
+
+            // Act
+            var created = bookingManager.CreateBooking(booking);
+
+            // Assert
+            Assert.True(created);
+        }
+
+        [Fact]
+        public void CreateBooking_RoomAvailable_CreatedBooking()
+        {
+            // Arrange
+            var booking = new Booking { Id = 1, CustomerId = 1, RoomId = 1, IsActive = true, StartDate = new DateTime(2021, 1, 1), EndDate = new DateTime(2021, 2, 1) };
+            // Act
+            var created = bookingManager.CreateBooking(booking);
+            // Assert
+            fakeBookingRepository.Verify(x => x.Add(booking), Times.Once());
+        }
+
+        [Fact]
+        public void GetFullyOccupiedDates_StartDateLaterThanEndDate_ThrowsException()
+        {
+            // Arrange
+            var startDate = DateTime.Today.AddDays(5);
+            var endDate = DateTime.Today.AddDays(4);
+
+            // Assert
+            Assert.Throws<ArgumentException>(() => bookingManager.GetFullyOccupiedDates(startDate, endDate));
         }
 
     }
