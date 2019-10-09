@@ -14,6 +14,9 @@ namespace HotelBooking.UnitTests
         Mock<IRepository<Booking>> fakeBookingRepository;
         Mock<IRepository<Room>> fakeRoomRepository;
 
+        private static DateTime d = DateTime.Today;
+        private static DateTime firstInMonth1 = new DateTime(d.Year, d.Month, 1).AddMonths(1);
+        private static DateTime firstInMonth2 = new DateTime(d.Year, d.Month, 1).AddMonths(2);
 
         public BookingManagerTests(){
 
@@ -21,8 +24,18 @@ namespace HotelBooking.UnitTests
 
             var bookings = new List<Booking>
             {
-                new Booking { Id = 1, CustomerId = 1, RoomId = 1, IsActive = true, StartDate = new DateTime(2020, 1, 1), EndDate = new DateTime(2020, 2, 1) },
-                new Booking { Id = 2, CustomerId = 2, RoomId = 2, IsActive = true, StartDate = new DateTime(2020, 1, 1), EndDate = new DateTime(2020, 2, 1) }
+                new Booking
+                {
+                    Id = 1, CustomerId = 1, RoomId = 1, IsActive = true,
+                    StartDate = firstInMonth1,
+                    EndDate = firstInMonth2
+                },
+                new Booking
+                {
+                    Id = 2, CustomerId = 2, RoomId = 2, IsActive = true,
+                    StartDate = firstInMonth1,
+                    EndDate = firstInMonth2
+                }
             };
 
             // Implement fake GetAll() method.
@@ -67,7 +80,12 @@ namespace HotelBooking.UnitTests
         public void CreateBooking_NoRoomsAvailable_ReturnFalse()
         {
             // Arrange
-            var booking = new Booking { Id = 1, CustomerId = 1, RoomId = 1, IsActive = true, StartDate = new DateTime(2020, 1, 1), EndDate = new DateTime(2020, 2, 1) };
+            var booking = new Booking
+            {
+                Id = 1, CustomerId = 1, RoomId = 1, IsActive = true,
+                StartDate = firstInMonth1,
+                EndDate = firstInMonth2
+            };
 
             // Act
             var created = bookingManager.CreateBooking(booking);
@@ -80,7 +98,12 @@ namespace HotelBooking.UnitTests
         public void CreateBooking_RoomAvailable_ReturnTrue()
         {
             // Arrange
-            var booking = new Booking { Id = 1, CustomerId = 1, RoomId = 1, IsActive = true, StartDate = new DateTime(2021, 1, 1), EndDate = new DateTime(2021, 2, 1) };
+            var booking = new Booking
+            {
+                Id = 1, CustomerId = 1, RoomId = 1, IsActive = true,
+                StartDate = firstInMonth2.AddDays(1),
+                EndDate = firstInMonth2.AddDays(2)
+            };
 
             // Act
             var created = bookingManager.CreateBooking(booking);
@@ -93,7 +116,12 @@ namespace HotelBooking.UnitTests
         public void CreateBooking_RoomAvailable_CreatedBooking()
         {
             // Arrange
-            var booking = new Booking { Id = 1, CustomerId = 1, RoomId = 1, IsActive = true, StartDate = new DateTime(2021, 1, 1), EndDate = new DateTime(2021, 2, 1) };
+            var booking = new Booking
+            {
+                Id = 1, CustomerId = 1, RoomId = 1, IsActive = true,
+                StartDate = firstInMonth2.AddDays(1),
+                EndDate = firstInMonth2.AddDays(2)
+            };
             // Act
             var created = bookingManager.CreateBooking(booking);
             // Assert
@@ -104,19 +132,24 @@ namespace HotelBooking.UnitTests
         public void GetFullyOccupiedDates_StartDateLaterThanEndDate_ThrowsException()
         {
             // Arrange
-            var startDate = DateTime.Today.AddDays(5);
-            var endDate = DateTime.Today.AddDays(4);
+            var startDate = DateTime.Today.AddDays(2);
+            var endDate = DateTime.Today.AddDays(1);
 
             // Assert
             Assert.Throws<ArgumentException>(() => bookingManager.GetFullyOccupiedDates(startDate, endDate));
         }
 
+        public static IEnumerable<object[]> VacantPeriodTestData()
+        {
+            yield return new object[] { firstInMonth1.AddDays(-2), firstInMonth1.AddDays(-1), 0 }; // Vacant period BEFORE known bookings.
+            yield return new object[] { firstInMonth1.AddDays(-1), firstInMonth1, 1 };             // One day intersecting start of known bookings.
+            yield return new object[] { firstInMonth2, firstInMonth2.AddDays(1), 1 };              // One day intersecting end of known bookings.
+            yield return new object[] { firstInMonth2.AddDays(1), firstInMonth2.AddDays(2), 0 };   // Vacant period AFTER known bookings.
+        }
+        
         [Theory]
-        [InlineData("30/12/2019", "31/12/2019", 0)] // Vacant period BEFORE known bookings.
-        [InlineData("31/12/2019", "1/1/2020", 1)] // One day intersecting start of known bookings.
-        [InlineData("1/2/2020", "2/2/2020", 1)] // One day intersecting end of known bookings.
-        [InlineData("30/12/2021", "31/12/2021", 0)] // Vacant period AFTER known bookings.
-        public void GetFullyOccupiedDates_VacantPeriod_ReturnsEmptyList(string startDate, string endDate, int numOccupiedDates)
+        [MemberData(nameof(VacantPeriodTestData))]
+        public void GetFullyOccupiedDates_VacantPeriod_ReturnsNumberOfOccupiedDates(string startDate, string endDate, int numOccupiedDates)
         {
             // Arrange
             var start = DateTime.Parse(startDate);
