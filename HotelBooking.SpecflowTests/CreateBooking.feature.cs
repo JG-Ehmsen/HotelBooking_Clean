@@ -81,11 +81,11 @@ namespace HotelBooking.SpecflowTests
         [Xunit.TraitAttribute("FeatureTitle", "CreateBooking")]
         [Xunit.TraitAttribute("Description", "Create booking")]
         [Xunit.TraitAttribute("Category", "mytag")]
-        [Xunit.InlineDataAttribute("47", "39", "\'2020-01-05\'", "\'2020-01-05\'", new string[0])]
-        [Xunit.InlineDataAttribute("79", "102", "\'2021-02-10\'", "\'2021-03-11\'", new string[0])]
-        [Xunit.InlineDataAttribute("112", "1", "\'2022-04-04\'", "\'2022-05-05\'", new string[0])]
-        [Xunit.InlineDataAttribute("113", "2", "\'1995-04-04\'", "\'1995-05-05\'", new string[0])]
-        public virtual void CreateBooking(string id, string customerId, string startDate, string endDate, string[] exampleTags)
+        [Xunit.InlineDataAttribute("47", "39", "\'2020-01-05\'", "\'2020-01-05\'", "true", new string[0])]
+        [Xunit.InlineDataAttribute("79", "102", "\'2021-02-10\'", "\'2021-03-11\'", "true", new string[0])]
+        [Xunit.InlineDataAttribute("112", "1", "\'2022-04-04\'", "\'2022-05-05\'", "true", new string[0])]
+        [Xunit.InlineDataAttribute("113", "2", "\'1995-04-04\'", "\'1995-05-05\'", "false", new string[0])]
+        public virtual void CreateBooking(string id, string customerId, string startDate, string endDate, string expectedResult, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "mytag"};
@@ -106,7 +106,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 11
  testRunner.When("I press button Create booking", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 12
- testRunner.Then("The result should be <true>", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("The result should be {0}", expectedResult), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

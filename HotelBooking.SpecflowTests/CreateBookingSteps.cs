@@ -92,15 +92,19 @@ namespace HotelBooking.SpecflowTests
                 StartDate = startDate,
                 EndDate = endDate
             };
-
-            bookingResult = bookingManager.CreateBooking(booking);
-           
+            try
+            {
+                bookingResult = bookingManager.CreateBooking(booking);
+            } catch (ArgumentException e)
+            {
+                bookingResult = false;
+            }
         }
         
         [Then(@"The result should be (.*)")]
-        public void ThenTheResultShouldBe(string p0)
+        public void ThenTheResultShouldBe(bool expectedResult)
         {
-            Assert.True(bookingResult); 
+            Assert.Equal(expectedResult, bookingResult);
         }
     }
 }
