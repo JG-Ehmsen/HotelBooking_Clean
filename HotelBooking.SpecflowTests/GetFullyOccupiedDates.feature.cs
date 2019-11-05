@@ -17,17 +17,17 @@ namespace HotelBooking.SpecflowTests
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class CreateBookingFeature : Xunit.IClassFixture<CreateBookingFeature.FixtureData>, System.IDisposable
+    public partial class GetFullyOccupiedDatesFeature : Xunit.IClassFixture<GetFullyOccupiedDatesFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "CreateBooking.feature"
+#line 1 "GetFullyOccupiedDates.feature"
 #line hidden
         
-        public CreateBookingFeature(CreateBookingFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public GetFullyOccupiedDatesFeature(GetFullyOccupiedDatesFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -36,8 +36,8 @@ namespace HotelBooking.SpecflowTests
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "CreateBooking", "\tIn order to avoid silly mistakes\r\n\tAs a general idiot\r\n\tI want to be able to cre" +
-                    "ate a booking", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "GetFullyOccupiedDates", "\tIn order to avoid silly mistakes\r\n\tAs a math idiot\r\n\tI want to get the amount of" +
+                    " fully occupied dates", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -77,15 +77,15 @@ namespace HotelBooking.SpecflowTests
             this.ScenarioTearDown();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="Create booking")]
-        [Xunit.TraitAttribute("FeatureTitle", "CreateBooking")]
-        [Xunit.TraitAttribute("Description", "Create booking")]
+        [Xunit.TheoryAttribute(DisplayName="Get fully occupied dates")]
+        [Xunit.TraitAttribute("FeatureTitle", "GetFullyOccupiedDates")]
+        [Xunit.TraitAttribute("Description", "Get fully occupied dates")]
         [Xunit.TraitAttribute("Category", "mytag")]
-        [Xunit.InlineDataAttribute("1", "39", "\'2020-01-05\'", "\'2020-01-05\'", "true", new string[0])]
-        [Xunit.InlineDataAttribute("2", "102", "\'2021-02-10\'", "\'2021-03-11\'", "true", new string[0])]
-        [Xunit.InlineDataAttribute("3", "1", "\'2022-04-04\'", "\'2022-05-05\'", "true", new string[0])]
-        [Xunit.InlineDataAttribute("4", "2", "\'1995-04-04\'", "\'1995-05-05\'", "false", new string[0])]
-        public virtual void CreateBooking(string id, string customerId, string startDate, string endDate, string expectedResult, string[] exampleTags)
+        [Xunit.InlineDataAttribute("1", "\'2020-01-01\'", "\'2020-01-01\'", "1", new string[0])]
+        [Xunit.InlineDataAttribute("2", "\'2020-01-01\'", "\'2020-01-05\'", "5", new string[0])]
+        [Xunit.InlineDataAttribute("3", "\'2020-01-01\'", "\'2021-01-01\'", "367", new string[0])]
+        [Xunit.InlineDataAttribute("4", "\'2040-01-01\'", "\'2041-01-01\'", "0", new string[0])]
+        public virtual void GetFullyOccupiedDates(string id, string startDate, string endDate, string expectedFullyOccupiedDates, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "mytag"};
@@ -93,20 +93,18 @@ namespace HotelBooking.SpecflowTests
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create booking", null, @__tags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get fully occupied dates", null, @__tags);
 #line 7
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 8
- testRunner.Given(string.Format("I have entered a start date {0}", startDate), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given(string.Format("I have entered a date range start date {0}", startDate), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 9
- testRunner.And(string.Format("I have entered a end date {0}", endDate), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And(string.Format("I have entered a date range end date {0}", endDate), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 10
- testRunner.And(string.Format("I have entered a customer id {0}", customerId), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.When("I press find fully occupied dates", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 11
- testRunner.When("I press button Create booking", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 12
- testRunner.Then(string.Format("The result should be {0}", expectedResult), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("the result should be {0}", expectedFullyOccupiedDates), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -118,12 +116,12 @@ this.ScenarioInitialize(scenarioInfo);
             
             public FixtureData()
             {
-                CreateBookingFeature.FeatureSetup();
+                GetFullyOccupiedDatesFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                CreateBookingFeature.FeatureTearDown();
+                GetFullyOccupiedDatesFeature.FeatureTearDown();
             }
         }
     }
