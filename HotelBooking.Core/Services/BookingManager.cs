@@ -16,6 +16,13 @@ namespace HotelBooking.Core
             this.roomRepository = roomRepository;
         }
 
+
+        /**
+         * Cyclomatic complexity:
+         * 1 = 1 + 1 = 2
+         * 2 = 5 - 5 + 2 = 2
+         * 3 = 2
+         */
         public bool CreateBooking(Booking booking)
         {
             int roomId = FindAvailableRoom(booking.StartDate, booking.EndDate);
@@ -33,6 +40,12 @@ namespace HotelBooking.Core
             }
         }
 
+        /**
+         * Cyclomatic complexity:
+         * 1 = 3 + 1 = 4
+         * 2 = 9 - 7 + 2 = 4
+         * 3 = 4
+         */
         public int FindAvailableRoom(DateTime startDate, DateTime endDate)
         {
             if (startDate <= DateTime.Today || startDate > endDate)
@@ -42,8 +55,7 @@ namespace HotelBooking.Core
             foreach (var room in roomRepository.GetAll())
             {
                 var activeBookingsForCurrentRoom = activeBookings.Where(b => b.RoomId == room.Id);
-                if (activeBookingsForCurrentRoom.All(b => startDate < b.StartDate &&
-                    endDate < b.StartDate || startDate > b.EndDate && endDate > b.EndDate))
+                if (activeBookingsForCurrentRoom.All(b => startDate < b.StartDate && endDate < b.StartDate || startDate > b.EndDate && endDate > b.EndDate))
                 {
                     return room.Id;
                 }
@@ -51,6 +63,12 @@ namespace HotelBooking.Core
             return -1;
         }
 
+        /**
+         * Cyclomatic Complexity:
+         * 1 = 4 + 1 = 5
+         * 2 = 10 - 7 + 2 = 5
+         * 3 = 4 + 1 = 5
+         */
         public List<DateTime> GetFullyOccupiedDates(DateTime startDate, DateTime endDate)
         {
             if (startDate > endDate)
